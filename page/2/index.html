@@ -6,18 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="/laiwg.top">
-  <title>dionysos 的 博客</title>
+  <title>dionysos的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
-<meta property="og:title" content="dionysos 的 博客">
+<meta property="og:title" content="dionysos的博客">
 <meta property="og:url" content="page/2/index.html">
-<meta property="og:site_name" content="dionysos 的 博客">
-<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="dionysos的博客">
+<meta property="og:locale">
 <meta property="article:author" content="dionysos">
 <meta property="article:tag" content="游戏开发者,程序猿,极客,编程,代码,开源">
 <meta name="twitter:card" content="summary">
   
-    <link rel="alternative" href="/atom.xml" title="dionysos 的 博客" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="dionysos的博客" type="application/atom+xml">
   
   
     <link rel="icon" href="/assert/head.jpg">
@@ -140,192 +140,6 @@
           </div>
           <div id="js-content" class="content-ll">
             
-  
-    <article id="post-xlua-原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="archives/f93ee69d.html">xlua 原理</a>
-    </h1>
-  
-
-        <!--显示阅读次数-->
-        
-        
-        <a href="archives/f93ee69d.html" class="archive-article-date">
-  	<time datetime="2020-04-17T08:04:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>先大概写下原理。</p>
-<p>xlua 脚本在unity工作原理。</p>
-<p>cs脚本 MonoBehaviour 运行时，创建一个xlua运行对象。这个运行对象一般会设置为全局唯一。</p>
-<p>xua运行对象可以理解为一个解释器，专门用来解释lua语言。</p>
-<!---more--->
-
-<p>然后，可以动态加载lua脚本。例如如下：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">luaEnv.DoString(luaScript.text, <span class="string">&quot;LuaTestScript&quot;</span>, scriptEnv);</span><br></pre></td></tr></table></figure>
-
-<p>这里就加载了一个LuaTestScript 脚本。LuaTestScript脚本内容大概如下：</p>
-<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">start</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;lua start...&quot;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">update</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;lua update&quot;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">init</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;lua init&quot;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSomething</span><span class="params">()</span></span></span><br><span class="line">    <span class="comment">-- lua todo</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ondestroy</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;lua destroy&quot;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-<p>这里我们写了5个方法：start、update、init、doSomething、ondestroy。其中有4个方法需要c#调用。这里需要在MonoBehaviour 脚本中进行反射设置：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scriptEnv.Get(<span class="string">&quot;start&quot;</span>, <span class="keyword">out</span> luaStart);</span><br><span class="line">scriptEnv.Get(<span class="string">&quot;update&quot;</span>, <span class="keyword">out</span> luaUpdate);</span><br><span class="line">scriptEnv.Get(<span class="string">&quot;ondestroy&quot;</span>, <span class="keyword">out</span> luaOnDestroy);</span><br><span class="line">scriptEnv.Get(<span class="string">&quot;init&quot;</span>, <span class="keyword">out</span> luaInit);</span><br></pre></td></tr></table></figure>
-
-<p>然后在具体地方调用即可，例如：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Use this for initialization</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (luaStart != <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        luaStart();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(luaInit != <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        luaInit();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个，就是完整一个xlua工作流程。至于具体如何hotfix、gc等问题，需要后续再继续了解。</p>
-<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><p>Monobehaviour 源码:</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> System.Collections;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> XLua;</span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">XLuaTest</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">LuaCallCSharp</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">LuaBehaviour</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> TextAsset luaScript;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">internal</span> <span class="keyword">static</span> LuaEnv luaEnv = <span class="keyword">new</span> LuaEnv(); <span class="comment">//all lua behaviour shared one luaenv only!</span></span><br><span class="line">        <span class="keyword">private</span> Action luaStart;</span><br><span class="line">        <span class="keyword">private</span> Action luaUpdate;</span><br><span class="line">        <span class="keyword">private</span> Action luaOnDestroy;</span><br><span class="line">        <span class="keyword">private</span> Action luaInit;</span><br><span class="line">        <span class="keyword">private</span> LuaTable scriptEnv;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">Awake</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            scriptEnv = luaEnv.NewTable();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 为每个脚本设置一个独立的环境，可一定程度上防止脚本间全局变量、函数冲突</span></span><br><span class="line">            LuaTable meta = luaEnv.NewTable();</span><br><span class="line">            meta.Set(<span class="string">&quot;__index&quot;</span>, luaEnv.Global);</span><br><span class="line">            scriptEnv.SetMetaTable(meta);</span><br><span class="line">            meta.Dispose();</span><br><span class="line"></span><br><span class="line">            scriptEnv.Set(<span class="string">&quot;self&quot;</span>, <span class="keyword">this</span>);</span><br><span class="line">            luaEnv.DoString(luaScript.text, <span class="string">&quot;LuaTestScript&quot;</span>, scriptEnv);</span><br><span class="line">            </span><br><span class="line">            Action luaAwake = scriptEnv.Get&lt;Action&gt;(<span class="string">&quot;awake&quot;</span>);</span><br><span class="line">            scriptEnv.Get(<span class="string">&quot;start&quot;</span>, <span class="keyword">out</span> luaStart);</span><br><span class="line">            scriptEnv.Get(<span class="string">&quot;update&quot;</span>, <span class="keyword">out</span> luaUpdate);</span><br><span class="line">            scriptEnv.Get(<span class="string">&quot;ondestroy&quot;</span>, <span class="keyword">out</span> luaOnDestroy);</span><br><span class="line">            scriptEnv.Get(<span class="string">&quot;init&quot;</span>, <span class="keyword">out</span> luaInit);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (luaAwake != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                luaAwake();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Use this for initialization</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">if</span> (luaStart != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                luaStart();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(luaInit != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                luaInit();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Update is called once per frame</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">Update</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">if</span> (luaUpdate != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                luaUpdate();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">OnDestroy</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">if</span> (luaOnDestroy != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                luaOnDestroy();</span><br><span class="line">            &#125;</span><br><span class="line">            luaOnDestroy = <span class="literal">null</span>;</span><br><span class="line">            luaUpdate = <span class="literal">null</span>;</span><br><span class="line">            luaStart = <span class="literal">null</span>;</span><br><span class="line">            luaInit = <span class="literal">null</span>;</span><br><span class="line">            scriptEnv.Dispose();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-      
-
-      
-      
-        <div class="declare" hidden="hidden"></div>
-      
-      
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="archives/f93ee69d.html">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-剔除算法汇总" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="archives/dade4bcd.html">剔除算法汇总</a>
-    </h1>
-  
-
-        <!--显示阅读次数-->
-        
-        
-        <a href="archives/dade4bcd.html" class="archive-article-date">
-  	<time datetime="2020-04-17T02:21:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>占坑</p>
-<p><a href="https://blog.csdn.net/qq_33744693/article/details/88704309">https://blog.csdn.net/qq_33744693/article/details/88704309</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/66407205">https://zhuanlan.zhihu.com/p/66407205</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/74936111">https://zhuanlan.zhihu.com/p/74936111</a></p>
-<!---more--->
-      
-
-      
-      
-        <div class="declare" hidden="hidden"></div>
-      
-      
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">unity</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="archives/dade4bcd.html">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
     <article id="post-半透明渲染技术" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -574,13 +388,13 @@
 <p>根据渲染管线各个阶段内容，我们分为大概三个大阶段：应用阶段、几何阶段、光栅化阶段。其中应用阶段在CPU中进行，几何阶段和光栅化阶段在GPU中进行。</p>
 <p><strong>这里需要对图线颜色区别，确认具体阶段可编程、可配置、固定区别信息；</strong></p>
 <p><img src="C:\Users\laiwugong\AppData\Roaming\Typora\typora-user-images\image-20200506113031842.png" alt="image-20200506113031842"></p>
-<p><a href="https://zhuanlan.zhihu.com/p/51684325">https://zhuanlan.zhihu.com/p/51684325</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/51684325">https://zhuanlan.zhihu.com/p/51684325</a></p>
 <h2 id="3-应用阶段"><a href="#3-应用阶段" class="headerlink" title="3. 应用阶段"></a>3. 应用阶段</h2><p>应用阶段是在CPU中运行，主要任务是<strong>把需要显示在屏幕上的几何信息输入GPU中</strong>，GPU再进行具体渲染工作。</p>
 <p>具体任务大致可以分为三个内容：</p>
 <ol>
 <li><p>准备场景数据，数据包括场景中的模型、光源、各种贴图信息等；</p>
 </li>
-<li><p>粗粒度剔除工作，剔除不可见物体，减少非必要计算，提高GPU效率；这个阶段常用的剔除算法有：视锥体剔除（Frustum Culling）和<a href="https://blog.csdn.net/qq_33744693/article/details/88704309">遮挡剔除（Occlusion Culling)</a></p>
+<li><p>粗粒度剔除工作，剔除不可见物体，减少非必要计算，提高GPU效率；这个阶段常用的剔除算法有：视锥体剔除（Frustum Culling）和<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33744693/article/details/88704309">遮挡剔除（Occlusion Culling)</a></p>
 <p>这里有个地方需要注意的是，剔除和裁剪的区别；</p>
 <p>剔除：将整个物体数据移除，不发送给GPU渲染；</p>
 <p>裁剪：物体并不一定全部在视锥体外面，即物体一部分在视锥体内，一部分在视锥体外部。这个阶段工作发生在GPU上。常见的算法有Cohen-Sutherland算法、中点分割法、Liang-Barsky算法等。</p>
@@ -634,7 +448,7 @@
 <p>额外多提一些内容，这里讲的Draw Call，实际上指的是Direct Rendering，渲染数据全部来至于CPU，还有Indirect  Rendering 和 Conditional Rendering 2种渲染方式。这两种方式的渲染数据有些是来自于GPU传过来的。</p>
 <p>Indirect  Rendering方式运行运行直接渲染GPU中的数据，省去GPU-&gt;CPU-&gt;GPU的拷贝过程。</p>
 <p>Condition Rendering运行在某些条件下渲染，在某些条件不渲染，经典运用就是Occlusion Query。</p>
-<p>这块内容，需要加深了解，可以参考<a href="https://www.bilibili.com/read/cv1823723/">openGL中的drawCall类型</a>。</p>
+<p>这块内容，需要加深了解，可以参考<a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv1823723/">openGL中的drawCall类型</a>。</p>
 <ul>
 <li>Static Batching:<br>用于不会移到，旋转，缩放并且共享同一个材质的模型，在模型勾上Static就可以使用：<br><img src="http://pfp.ps.netease.com/kmpvt/file/5d6639fe68d86469ed3c9f76MsHA7s4901?sign=dLpGI3reN7FYSAjHaNf0dB2NOxo=&expire=1588152590" alt="image.png"><br>设置之后，打包时Unity会提取这些静态模型的Vertex buffer和index buffer分别合到一个大的buff中。优点是离线的，不消耗运行时计算，但是如果有很多使用了同样mesh的gameObject的进行static Batching的话，会复制N份同样的Mesh到大的VBO和EBO中，这样会导致内存增大，所以非常多重复的gameobject的情况下，不建议使用这个。</li>
 <li>Dynamic Batching:<br>原理和static batching差不多，只是它是针对动态物体的，在运行的时候，会把所有共享材质的模型顶点信息变换到世界空间下，然后一次dc画出来。<br>相比static batching不需要预先复制顶点数据，不需要额外的内存和包体的占用，但是运行时要消耗CPU，使用时最好要对比下不合批和合批的性能对比，看看值不值得使用。<br>另外还有注意，Dynamic Batching还有一些限制：<br>1.两个物体的scale刚好是呈镜像关系。<br>2.multi-pass<br>3.多光照<br>4.不支持Lightmap<br>5.材质实例不同也不会合批<br>6.不能超过900个顶点属性（5.x是这样，新版本可能有改动）</li>
@@ -757,7 +571,7 @@
 <p>渲染阴影、轮廓渲染</p>
 </li>
 <li><p>深度测试</p>
-<p>Eary-Z <a href="http://earlyz.io/2017/09/13/what-is-early-z-anyway.html">http://earlyz.io/2017/09/13/what-is-early-z-anyway.html</a></p>
+<p>Eary-Z <a target="_blank" rel="noopener" href="http://earlyz.io/2017/09/13/what-is-early-z-anyway.html">http://earlyz.io/2017/09/13/what-is-early-z-anyway.html</a></p>
 <p>其中eary-z 技术会有一些问题，<strong>其中之一就是透明度测试问题；（这里我有个疑问，为什么会有冲突）</strong></p>
 </li>
 <li></li>
@@ -873,7 +687,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>[toc]</p>
-<p>flutter tutorial 系列文章，主要学习<a href="https://flutter.dev/docs/get-started/install">google flutter started</a> 的历程。</p>
+<p>flutter tutorial 系列文章，主要学习<a target="_blank" rel="noopener" href="https://flutter.dev/docs/get-started/install">google flutter started</a> 的历程。</p>
 <h2 id="1-write-my-first-app"><a href="#1-write-my-first-app" class="headerlink" title="1. write my first app"></a>1. write my first app</h2><h3 id="1-查看flutter配置指令"><a href="#1-查看flutter配置指令" class="headerlink" title="1. 查看flutter配置指令"></a>1. 查看flutter配置指令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flutter doctor -v</span><br></pre></td></tr></table></figure>
 
 <p>根据具体信息，配置和调整项目内容；这里需要注意2点：</p>
@@ -886,7 +700,7 @@
 <p>通过create 指令可以生成app</p>
 <h3 id="3-运行app"><a href="#3-运行app" class="headerlink" title="3. 运行app"></a>3. 运行app</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flutter run</span><br></pre></td></tr></table></figure>
 
-<p>run 指令即可运行app，同时支持<a href="https://flutter.dev/docs/get-started/test-drive?tab=androidstudio">hot reload</a>。</p>
+<p>run 指令即可运行app，同时支持<a target="_blank" rel="noopener" href="https://flutter.dev/docs/get-started/test-drive?tab=androidstudio">hot reload</a>。</p>
 <h2 id="2-示例代码学习"><a href="#2-示例代码学习" class="headerlink" title="2. 示例代码学习"></a>2. 示例代码学习</h2><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Copyright 2018 The Flutter team. All rights reserved.</span></span><br><span class="line"><span class="comment">// Use of this source code is governed by a BSD-style license that can be</span></span><br><span class="line"><span class="comment">// found in the LICENSE file.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;package:flutter/material.dart&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> main() =&gt; runApp(MyApp());</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyApp</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MaterialApp(</span><br><span class="line">      title: <span class="string">&#x27;Welcome to Flutter&#x27;</span>,</span><br><span class="line">      home: Scaffold(</span><br><span class="line">        appBar: AppBar(</span><br><span class="line">          title: Text(<span class="string">&#x27;Welcome to Flutter&#x27;</span>),</span><br><span class="line">        ),</span><br><span class="line">        body: Center(</span><br><span class="line">          child: Text(<span class="string">&#x27;Hello World&#x27;</span>),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ol>
@@ -894,7 +708,7 @@
 <li>flutter中基本所有内容都是widget 部件</li>
 <li>Scaffold 来自Material 库内容，提供默认app bar，title，和body特性</li>
 </ol>
-<h2 id="3-使用外部包"><a href="#3-使用外部包" class="headerlink" title="3. 使用外部包"></a>3. 使用外部包</h2><p>在<a href="https://pub.dev/">pub.dev</a>我们可以找到很多flutter包，这里我们以 <a href="https://pub.dev/packages/english_words">english_words</a>为例。</p>
+<h2 id="3-使用外部包"><a href="#3-使用外部包" class="headerlink" title="3. 使用外部包"></a>3. 使用外部包</h2><p>在<a target="_blank" rel="noopener" href="https://pub.dev/">pub.dev</a>我们可以找到很多flutter包，这里我们以 <a target="_blank" rel="noopener" href="https://pub.dev/packages/english_words">english_words</a>为例。</p>
 <p><strong>pubspec.yaml</strong>文件统一管理和依赖项</p>
 <ol>
 <li><p>导入外部包</p>
@@ -996,7 +810,7 @@
 
 <ol>
 <li><p>Node.js 安装</p>
-<p>Node.js 下载地址：<a href="https://nodejs.org/en/download/%EF%BC%9B%E8%AE%B0%E5%BE%97%E9%80%89LTS">https://nodejs.org/en/download/；记得选LTS</a> 版本即可</p>
+<p>Node.js 下载地址：<a target="_blank" rel="noopener" href="https://nodejs.org/en/download/%EF%BC%9B%E8%AE%B0%E5%BE%97%E9%80%89LTS">https://nodejs.org/en/download/；记得选LTS</a> 版本即可</p>
 </li>
 </ol>
 <ol start="2">
@@ -1010,7 +824,7 @@
 <p>到目前为止，hexo就算安装完毕了，我们可以开始写博客了。是不是非常简单</p>
 </li>
 </ol>
-<h2 id="日常如何写博客"><a href="#日常如何写博客" class="headerlink" title="日常如何写博客"></a>日常如何写博客</h2><p>首先，我这里特别建议大家安装typora工具，学习一些常用Markdown语法，这里推荐<a href="http://www.laiwg.top/archives/23729.html">常用Markdown和math语法</a> 一文。</p>
+<h2 id="日常如何写博客"><a href="#日常如何写博客" class="headerlink" title="日常如何写博客"></a>日常如何写博客</h2><p>首先，我这里特别建议大家安装typora工具，学习一些常用Markdown语法，这里推荐<a target="_blank" rel="noopener" href="http://www.laiwg.top/archives/23729.html">常用Markdown和math语法</a> 一文。</p>
 <ol>
 <li><p>新建一篇博文</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;博文标题&quot;</span><br></pre></td></tr></table></figure>
@@ -1056,7 +870,7 @@
 
 <p>按要求输入用户名和密码即可。推送过程需要等几分钟，后续在浏览器输入地址：</p>
 <p><strong>username.github.io</strong>就可以看到自己的博客了，例如我的博客地址是：</p>
-<p><a href="http://dionysoslai.github.io/">http://dionysoslai.github.io/</a></p>
+<p><a target="_blank" rel="noopener" href="http://dionysoslai.github.io/">http://dionysoslai.github.io/</a></p>
 </li>
 </ol>
 <hr>
@@ -1072,11 +886,11 @@
 </li>
 <li><p>GitHub 域名设置</p>
 <p>登录到之前创建好的仓库中，点击settting，在页面中找到Custom domain, 填上域名即可，我这里填上了域名</p>
-<p><a href="http://www.laiwg.top/">www.laiwg.top</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.laiwg.top/">www.laiwg.top</a></p>
 <p><img src="https://res.cloudinary.com/doxwlabxr/image/upload/v1579161356/3_jevk7a.png" alt="GitHub 域名配置"></p>
 </li>
 <li><p>CNAME 文件</p>
-<p>在blog/source 目录下创建一个CNAME文件，并填上完整域名，例如，我这里是：<a href="http://www.laiwg.top./">www.laiwg.top。</a></p>
+<p>在blog/source 目录下创建一个CNAME文件，并填上完整域名，例如，我这里是：<a target="_blank" rel="noopener" href="http://www.laiwg.top./">www.laiwg.top。</a></p>
 </li>
 </ol>
 <p>至此，重新生成一遍博客，并推送即可。</p>
@@ -1262,9 +1076,9 @@
         <p>[toc]</p>
 <h2 id="1-序"><a href="#1-序" class="headerlink" title="1. 序"></a>1. 序</h2><p>游戏中，经常会用到ttf字体库，一般这些ttf字体都是UI同事直接提供，提供的ttf字体都比较全面，这导致文件偏大问题，对于游戏来说，加载就会成为其瓶颈问题。例如当前项目中的2套ttf字体分别是3M和5M。因此，有时候我们需要将ttf精简化，在确定地方采用精简字体。</p>
 <h2 id="2-工具"><a href="#2-工具" class="headerlink" title="2. 工具"></a>2. 工具</h2><p>FontMin</p>
-<p><a href="http://ecomfe.github.io/fontmin/">Fontmin</a> 是一个纯 JavaScript 实现的字体子集化方案。</p>
+<p><a target="_blank" rel="noopener" href="http://ecomfe.github.io/fontmin/">Fontmin</a> 是一个纯 JavaScript 实现的字体子集化方案。</p>
 <p>提供了 <code>ttf</code> 子集化，<code>eot/woff/svg</code> 格式转换，<code>css</code> 生成 等功能，助推 webfont 发展，提升网页文字体验。</p>
-<p>Fontmin官网：<a href="http://ecomfe.github.io/fontmin/">http://ecomfe.github.io/fontmin/</a></p>
+<p>Fontmin官网：<a target="_blank" rel="noopener" href="http://ecomfe.github.io/fontmin/">http://ecomfe.github.io/fontmin/</a></p>
 <!---more--->
 
 <h2 id="3-制作"><a href="#3-制作" class="headerlink" title="3. 制作"></a>3. 制作</h2><p>Fontmin 界面如下：</p>
@@ -1368,7 +1182,7 @@
 <li>Markdown 语法</li>
 <li>Math 公式语法</li>
 </ul>
-<h2 id="1-typora-软件"><a href="#1-typora-软件" class="headerlink" title="1. typora 软件"></a>1. typora 软件</h2><p>typora 是一款用来写md的软件，用来日常写一些笔记特别方便，这里强烈推荐大家使用这款软件。下载typora软件，可在<a href="https://www.typora.io/">typora官网</a> 下载。软件界面如下:</p>
+<h2 id="1-typora-软件"><a href="#1-typora-软件" class="headerlink" title="1. typora 软件"></a>1. typora 软件</h2><p>typora 是一款用来写md的软件，用来日常写一些笔记特别方便，这里强烈推荐大家使用这款软件。下载typora软件，可在<a target="_blank" rel="noopener" href="https://www.typora.io/">typora官网</a> 下载。软件界面如下:</p>
 <!---more--->
 
 <p><img src="https://res.cloudinary.com/doxwlabxr/image/upload/v1578383280/typora_%E8%BD%AF%E4%BB%B6%E6%88%AA%E5%9B%BE_m5ekrv.png"></p>
@@ -1687,7 +1501,7 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: false,
+		open_in_new: true,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
