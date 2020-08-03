@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="/laiwg.top">
   <title>xlua 原理 | dionysos的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="先大概写下原理。 xlua 脚本在unity工作原理。 cs脚本 MonoBehaviour 运行时，创建一个xlua运行对象。这个运行对象一般会设置为全局唯一。 xua运行对象可以理解为一个解释器，专门用来解释lua语言。   然后，可以动态加载lua脚本。例如如下： 1luaEnv.DoString(luaScript.text, &quot;LuaTestScript&quot;, scri">
+  <meta name="description" content="先大概写下原理。 xlua 脚本在unity工作原理。 cs脚本 MonoBehaviour 运行时，创建一个xlua运行对象。这个运行对象一般会设置为全局唯一。 xua运行对象可以理解为一个解释器，专门用来解释lua语言。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="xlua 原理">
 <meta property="og:url" content="archives/f93ee69d.html">
 <meta property="og:site_name" content="dionysos的博客">
-<meta property="og:description" content="先大概写下原理。 xlua 脚本在unity工作原理。 cs脚本 MonoBehaviour 运行时，创建一个xlua运行对象。这个运行对象一般会设置为全局唯一。 xua运行对象可以理解为一个解释器，专门用来解释lua语言。   然后，可以动态加载lua脚本。例如如下： 1luaEnv.DoString(luaScript.text, &quot;LuaTestScript&quot;, scri">
+<meta property="og:description" content="先大概写下原理。 xlua 脚本在unity工作原理。 cs脚本 MonoBehaviour 运行时，创建一个xlua运行对象。这个运行对象一般会设置为全局唯一。 xua运行对象可以理解为一个解释器，专门用来解释lua语言。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2020-04-17T08:04:13.000Z">
-<meta property="article:modified_time" content="2020-05-11T02:03:21.574Z">
+<meta property="article:modified_time" content="2020-08-03T06:50:12.836Z">
 <meta property="article:author" content="dionysos">
 <meta property="article:tag" content="随笔">
 <meta name="twitter:card" content="summary">
@@ -177,7 +177,7 @@
 <p>xlua 脚本在unity工作原理。</p>
 <p>cs脚本 MonoBehaviour 运行时，创建一个xlua运行对象。这个运行对象一般会设置为全局唯一。</p>
 <p>xua运行对象可以理解为一个解释器，专门用来解释lua语言。</p>
-<!---more--->
+<a id="more"></a>
 
 <p>然后，可以动态加载lua脚本。例如如下：</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">luaEnv.DoString(luaScript.text, <span class="string">&quot;LuaTestScript&quot;</span>, scriptEnv);</span><br></pre></td></tr></table></figure>
@@ -405,7 +405,7 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: true,
+		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,

@@ -25,7 +25,7 @@
 <meta property="og:image" content="c:/Users/laiwugong/AppData/Roaming/Typora/typora-user-images/image-20200523172711581.png">
 <meta property="og:image" content="c:/Users/laiwugong/AppData/Roaming/Typora/typora-user-images/image-20200523175036023.png">
 <meta property="article:published_time" content="2020-05-21T02:37:48.000Z">
-<meta property="article:modified_time" content="2020-06-01T16:07:47.684Z">
+<meta property="article:modified_time" content="2020-08-03T06:49:27.536Z">
 <meta property="article:author" content="dionysos">
 <meta property="article:tag" content="unity">
 <meta name="twitter:card" content="summary">
@@ -191,7 +191,7 @@
 <li>如何光栅化（绘制）一个三角形；</li>
 </ol>
 <p>具有后续的光照模型（着色）、网格简化、纹理映射等，我都认为核心内容的推广。因此，本章节主要阐述光栅化的核心内容（基本内容），把握整体主脉络。同时，对具体呈现设备不做介绍，读者看自行查阅资料。</p>
-<!---more--->
+<a id="more"></a>
 
 <h2 id="1-直线段扫描转换算法"><a href="#1-直线段扫描转换算法" class="headerlink" title="1. 直线段扫描转换算法"></a>1. 直线段扫描转换算法</h2><p>直线绘制问题是我们要谈到的第一个光栅化绘制算法，相关内容相信很多人之前都会零零散散接触过。</p>
 <p>在数学上，一条直线段可以有无穷多个点，但在屏幕呈现上的像素具有实际大小（可以理解为一个小正方形），因此直线段绘制时，需要做一些处理。如下图所示：</p>
@@ -199,7 +199,7 @@
 
 <p>用有限点来逼近无限点效果。</p>
 <h3 id="1-1-基本思路"><a href="#1-1-基本思路" class="headerlink" title="1.1 基本思路"></a>1.1 基本思路</h3><p>已知2个顶点P0和P1，我们根据数学直线定义：$y=kx+b$，可以求出直线公式：<br>$$<br>y=\frac{y_1-y_0}{x_1-x_0}x+\frac{x_1y_0-x_0y_1}{x_1-x_0}\tag{1.1}<br>$$<br>因此对于任意点$x\in[x_0,x_1]$，根据公式都可以求出。当然由于像素点都是整数范围，因此结果我们需要做四舍五入处理。</p>
-<p>具体实现参考：[<a target="_blank" rel="noopener" href="https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter%204.1%20drawLineBase]">https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter%204.1%20drawLineBase]</a>(<a target="_blank" rel="noopener" href="https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter">https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter</a> 4.1 drawLineBase)</p>
+<p>具体实现参考：[<a href="https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter%204.1%20drawLineBase]">https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter%204.1%20drawLineBase]</a>(<a href="https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter">https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter</a> 4.1 drawLineBase)</p>
 <p>直线算法是最基本图形，一个动画或者真实图形往往需要调用成千上万次画线算法程序，因此直线算法的好坏与效率至关重要。</p>
 <p>当前$y=kx+b$算法存在一个最基本问题，就是如何将<strong>乘法</strong>优化掉。</p>
 <h3 id="1-1-DDA（数值微分）画线算法"><a href="#1-1-DDA（数值微分）画线算法" class="headerlink" title="1.1  DDA（数值微分）画线算法"></a>1.1  DDA（数值微分）画线算法</h3><p>DDA（Digital Differenttial Analyzer）算法，引入一个重要思想—-增量思想。具体推导如下：<br>$$<br>\begin{align}<br>y_i&amp;=k_i+b\<br>y_{i+1}&amp;=kx_{i+1}+b\<br>&amp;=k(x_i+1)+b\<br>&amp;=kx_i+k+b\<br>&amp;=y_i+k<br>\end{align}\tag{1.2}<br>$$</p>
@@ -207,7 +207,7 @@
 <p>具体步骤如下图所示：</p>
 <img src="C:\Users\laiwugong\AppData\Roaming\Typora\typora-user-images\image-20200521175048088.png" alt="image-20200521175048088" style="zoom:67%;" />
 
-<p>详细实现参考：[<a target="_blank" rel="noopener" href="https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter%204.1%20drawLineDDA]">https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter%204.1%20drawLineDDA]</a>(<a target="_blank" rel="noopener" href="https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter">https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter</a> 4.1 drawLineDDA)</p>
+<p>详细实现参考：[<a href="https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter%204.1%20drawLineDDA]">https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter%204.1%20drawLineDDA]</a>(<a href="https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter">https://github.com/DionysosLai/SoftwareRenderer/tree/master/chapter</a> 4.1 drawLineDDA)</p>
 <p>DDA算法将一个乘法和加法变成了一个加法，效率得到了提升；但好坏程度呢，通过分析，我们可以看到当|k|&lt;1时，表现效果优良；但当|k|&gt;1时，绘制时会变得非常系数，具体效果图如下所示：</p>
 <img src="C:\Users\laiwugong\AppData\Roaming\Typora\typora-user-images\image-20200521200811071.png" alt="image-20200521200811071" style="zoom: 50%;" />
 
@@ -509,7 +509,7 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: true,
+		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,

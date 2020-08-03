@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/doxwlabxr/image/upload/v1579161047/2_wcz9yf.png">
 <meta property="og:image" content="https://res.cloudinary.com/doxwlabxr/image/upload/v1579161356/3_jevk7a.png">
 <meta property="article:published_time" content="2020-01-16T06:50:37.000Z">
-<meta property="article:modified_time" content="2020-04-08T11:36:29.365Z">
+<meta property="article:modified_time" content="2020-08-03T06:50:08.631Z">
 <meta property="article:author" content="dionysos">
 <meta property="article:tag" content="随笔">
 <meta name="twitter:card" content="summary">
@@ -182,11 +182,11 @@
 <p>最初搭建博客时，搜了一个资料，其中大部分都采用WordPress框架搭建。因此，吭哧吭哧的按照教程搭了一个示例博客。还没等我焐热个几分钟，再次登录时，坑爹事情出现了，居然要我域名实名制。</p>
 <p>实名制挺正常的，你也不往网站放一些违规内容，就平常学习内容等。令人崩溃的是，实名制需要的材料。身份证、人脸识别都ok，最后居然要求居住证（这玩意，一般很少人申请的）。因此，我把地址换回户籍地，嘿嘿，绑定手机又要求是户籍所在地的，我日啊。</p>
 <p>后面又尝试了其他方法，比方使用其他人电话等方法，均不通过。最后，想想都已经到这一地步了，不放弃，不抛弃原则，采用hexo + githup方式搭建博客。</p>
-<h2 id="hexo-安装"><a href="#hexo-安装" class="headerlink" title="hexo 安装"></a>hexo 安装</h2><!---more--->
+<h2 id="hexo-安装"><a href="#hexo-安装" class="headerlink" title="hexo 安装"></a>hexo 安装</h2><a id="more"></a>
 
 <ol>
 <li><p>Node.js 安装</p>
-<p>Node.js 下载地址：<a target="_blank" rel="noopener" href="https://nodejs.org/en/download/%EF%BC%9B%E8%AE%B0%E5%BE%97%E9%80%89LTS">https://nodejs.org/en/download/；记得选LTS</a> 版本即可</p>
+<p>Node.js 下载地址：<a href="https://nodejs.org/en/download/%EF%BC%9B%E8%AE%B0%E5%BE%97%E9%80%89LTS">https://nodejs.org/en/download/；记得选LTS</a> 版本即可</p>
 </li>
 </ol>
 <ol start="2">
@@ -200,7 +200,7 @@
 <p>到目前为止，hexo就算安装完毕了，我们可以开始写博客了。是不是非常简单</p>
 </li>
 </ol>
-<h2 id="日常如何写博客"><a href="#日常如何写博客" class="headerlink" title="日常如何写博客"></a>日常如何写博客</h2><p>首先，我这里特别建议大家安装typora工具，学习一些常用Markdown语法，这里推荐<a target="_blank" rel="noopener" href="http://www.laiwg.top/archives/23729.html">常用Markdown和math语法</a> 一文。</p>
+<h2 id="日常如何写博客"><a href="#日常如何写博客" class="headerlink" title="日常如何写博客"></a>日常如何写博客</h2><p>首先，我这里特别建议大家安装typora工具，学习一些常用Markdown语法，这里推荐<a href="http://www.laiwg.top/archives/23729.html">常用Markdown和math语法</a> 一文。</p>
 <ol>
 <li><p>新建一篇博文</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;博文标题&quot;</span><br></pre></td></tr></table></figure>
@@ -246,7 +246,7 @@
 
 <p>按要求输入用户名和密码即可。推送过程需要等几分钟，后续在浏览器输入地址：</p>
 <p><strong>username.github.io</strong>就可以看到自己的博客了，例如我的博客地址是：</p>
-<p><a target="_blank" rel="noopener" href="http://dionysoslai.github.io/">http://dionysoslai.github.io/</a></p>
+<p><a href="http://dionysoslai.github.io/">http://dionysoslai.github.io/</a></p>
 </li>
 </ol>
 <hr>
@@ -262,11 +262,11 @@
 </li>
 <li><p>GitHub 域名设置</p>
 <p>登录到之前创建好的仓库中，点击settting，在页面中找到Custom domain, 填上域名即可，我这里填上了域名</p>
-<p><a target="_blank" rel="noopener" href="http://www.laiwg.top/">www.laiwg.top</a></p>
+<p><a href="http://www.laiwg.top/">www.laiwg.top</a></p>
 <p><img src="https://res.cloudinary.com/doxwlabxr/image/upload/v1579161356/3_jevk7a.png" alt="GitHub 域名配置"></p>
 </li>
 <li><p>CNAME 文件</p>
-<p>在blog/source 目录下创建一个CNAME文件，并填上完整域名，例如，我这里是：<a target="_blank" rel="noopener" href="http://www.laiwg.top./">www.laiwg.top。</a></p>
+<p>在blog/source 目录下创建一个CNAME文件，并填上完整域名，例如，我这里是：<a href="http://www.laiwg.top./">www.laiwg.top。</a></p>
 </li>
 </ol>
 <p>至此，重新生成一遍博客，并推送即可。</p>
@@ -482,7 +482,7 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: true,
+		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,

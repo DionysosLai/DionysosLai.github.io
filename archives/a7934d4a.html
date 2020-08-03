@@ -32,7 +32,7 @@
 <meta property="og:image" content="c:/Users/laiwugong/AppData/Roaming/Typora/typora-user-images/image-20200520154012192.png">
 <meta property="og:image" content="c:/Users/laiwugong/AppData/Roaming/Typora/typora-user-images/image-20200519172001620.png">
 <meta property="article:published_time" content="2020-05-06T15:40:07.000Z">
-<meta property="article:modified_time" content="2020-06-04T08:57:04.562Z">
+<meta property="article:modified_time" content="2020-08-03T06:49:22.447Z">
 <meta property="article:author" content="dionysos">
 <meta property="article:tag" content="游戏开发者,程序猿,极客,编程,代码,开源">
 <meta name="twitter:card" content="summary">
@@ -195,7 +195,7 @@
 <p>在学习变换之前，我们需要明白：为什么我们要学习变换？</p>
 <p>假设，我们很容易画出一个位置在原点，长度为1的正方形，如果要画一个任意位置，长度为m、n的长方形，我们该如何比较方便处理呢？</p>
 <p>第一个思路，就是在该位置重新画一个长度为m、n的长方形。这样处理，最浅显易懂，但相对比较麻烦，因为长方形的位置和长度都不一样，还可能有旋转等需要，如果发现变形，可能完全就无法采用长方形方式绘制。</p>
-<!---more--->
+<a id="more"></a>
 
 <p>第二个思路，利用最初正方形，我们经过一定操作，将正方形变成要求的长方形，步骤如下：</p>
 <ol>
@@ -237,7 +237,7 @@
 <p><strong>缩放矩阵</strong>公式：<br>$$<br>\begin{split}<br>scale(s_x, s_y, s_z) =<br>\begin{bmatrix}<br>s_x &amp;0 &amp;0 &amp;0 \<br>0 &amp;s_y &amp;0 &amp;0 \<br>0 &amp;0 &amp;s_x &amp;0 \<br>0 &amp;0 &amp;0 &amp;1<br>\end{bmatrix}<br>\end{split}\tag{2.1}<br>$$<br><strong>旋转矩阵</strong>公式：<br>$$<br>\begin{split}<br>绕z轴旋转\<br>rotate-z(\phi) =<br>\begin{bmatrix}<br>cos\phi &amp;-sin\phi &amp;0 &amp;0 \<br>sin\phi &amp;cos\phi &amp;0 &amp;0 \<br>0 &amp;0 &amp;1 &amp;0 \<br>0 &amp;0 &amp;0 &amp;1<br>\end{bmatrix}<br>\end{split}<br>\<br>\begin{split}<br>绕x轴旋转\<br>rotate-x(\phi) =<br>\begin{bmatrix}<br>1 &amp;0 &amp;0 &amp;0 \<br>0 &amp;cos\phi &amp;-sin\phi &amp;0 \<br>0 &amp;sin\phi &amp;cos\phi &amp;0 \<br>0 &amp;0 &amp;0 &amp;1<br>\end{bmatrix}<br>\end{split}<br>\<br>\begin{split}<br>绕y轴旋转\<br>rotate-y(\phi) =<br>\begin{bmatrix}<br>cos\phi &amp;0 &amp;sin\phi &amp;0 \<br>0 &amp;1 &amp;0 &amp;0 \<br>-sin\phi &amp;0 &amp;cos\phi &amp;0 \<br>0 &amp;0 &amp;0 &amp;1<br>\end{bmatrix}<br>\end{split}\tag{2.2}<br>$$<br>旋转矩阵稍微比较复杂，其中绕y轴旋转跟绕x、z轴旋转的格式不一致，主要是因为采用左手坐标系原因。如果采用右手坐标系，则应该是另一个公式不一样，这个可自行验证。</p>
 <p><strong>错切矩阵</strong>公式：<br>$$<br>\begin{split}<br>shear-x(d_y, d_z) =<br>\begin{bmatrix}<br>1 &amp;d_y &amp;d_z &amp;0 \<br>0 &amp;1 &amp;0 &amp;0 \<br>0 &amp;0 &amp;1 &amp;0 \<br>0 &amp;0 &amp;0 &amp;1<br>\end{bmatrix}<br>\end{split}\tag{2.3}<br>$$</p>
 <p><strong>对称矩阵</strong>公式:<br>$$<br>\begin{split}<br>xy平面对称\<br>reflect-xy =<br>\begin{bmatrix}<br>1 &amp;0 &amp;0 &amp;0 \<br>0 &amp;1 &amp;0 &amp;0 \<br>0 &amp;0 &amp;-1 &amp;0 \<br>0 &amp;0 &amp;0 &amp;1<br>\end{bmatrix}<br>\end{split}<br>\<br>\begin{split}<br>绕yz轴旋转\<br>rotate-yz(\phi) =<br>\begin{bmatrix}<br>-1 &amp;0 &amp;0 &amp;0 \<br>0 &amp;1 &amp;0 &amp;0 \<br>0 &amp;0 &amp;1 &amp;0 \<br>0 &amp;0 &amp;0 &amp;1<br>\end{bmatrix}<br>\end{split}<br>\<br>\begin{split}<br>绕zx轴旋转\<br>rotate-zx(\phi) =<br>\begin{bmatrix}<br>1 &amp;0 &amp;0 &amp;0 \<br>0 &amp;-1 &amp;0 &amp;0 \<br>0 &amp;0 &amp;1 &amp;0 \<br>0 &amp;0 &amp;0 &amp;1<br>\end{bmatrix}<br>\end{split}\tag{2.4}<br>$$<br><strong>平移矩阵</strong> 公式:<br>$$<br>\begin{split}<br>translate(x_t,yt_t, z_t) =<br>\begin{bmatrix}<br>1 &amp;0 &amp;0 &amp;x_t \<br>0 &amp;1 &amp;0 &amp;y_t \<br>0 &amp;0 &amp;1 &amp;z_t \<br>0 &amp;0 &amp;0 &amp;1<br>\end{bmatrix}<br>\end{split}\tag{2.5}<br>$$<br>其中，对于旋转矩阵，这里由于实际需要，给出绕任意角度旋转矩阵公式：<br>$$<br>\begin{split}<br>rotate(\theta,\phi) =<br>\begin{bmatrix}<br>\frac{u^2+(v)}{} &amp;0 &amp;0 &amp;x_t \<br>0 &amp;1 &amp;0 &amp;y_t \<br>0 &amp;0 &amp;1 &amp;z_t \<br>0 &amp;0 &amp;0 &amp;1<br>\end{bmatrix}<br>\end{split}\tag{2.5}<br>$$</p>
-<h3 id="2-2-法线变换"><a href="#2-2-法线变换" class="headerlink" title="2.2 法线变换"></a>2.2 法线变换</h3><p>好文章推荐：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/21874816">https://www.zhihu.com/question/21874816</a></p>
+<h3 id="2-2-法线变换"><a href="#2-2-法线变换" class="headerlink" title="2.2 法线变换"></a>2.2 法线变换</h3><p>好文章推荐：<a href="https://www.zhihu.com/question/21874816">https://www.zhihu.com/question/21874816</a></p>
 <p>由于在图像学中要经常用到法线向量，比方后续会谈到的光照系统。因此，这里有必要对法线变换进行特殊讲解下，这是由于经过基础变换之后，法线会相应改变。如下图所示：</p>
 <p><img src="C:\Users\laiwugong\AppData\Roaming\Typora\typora-user-images\image-20200518195622128.png" alt="image-20200518195622128"></p>
 <p>经过简单错切变换，法线不在是变换后的法线了。这是为什么呢？下面给出严格数学判断。<br>$$<br>首先定义，向量\vec t，其法向量为\vec n，变换矩阵为M，假设变换后的向量和法向量依然垂直，则有如下等式：\<br>\vec n^Tt=0\<br>(M\vec n)^T(M\vec t)=0=&gt;\vec n^TM^TM\vec t=0\<br>要使第二个等式成立，则M^tM=I\<br>这个向量不可能。因此从数学上进行判否。<br>$$</p>
@@ -295,12 +295,12 @@
 <h2 id="4-3-视口变换"><a href="#4-3-视口变换" class="headerlink" title="4.3 视口变换"></a>4.3 视口变换</h2><p>经过透视变换之后，所有物体坐标都将规范到$[-1,1]^3$范围内。最终我们需要将物体绘制到屏幕上，因此最后还需要做一个屏幕变换操作。</p>
 <p>对于屏幕，我们抽象定义成一个二维数组组成的数组，并且每个元素是一个像素点。二维数组维度我们用分辨率定义。例如分辨率1920*1080，表示二维数组大小。在实际中像素很复杂，但我们这里简单将 像素点定义成一个小方块，每个像素可以呈现黑到百各种颜色，可以用RGB表示。</p>
 <p>屏幕空间，我们将屏幕左下角定义为原点(0,0)，右上角定义为(w,h)，因此视口变换可以简单先平移在缩放，具体公式如下：主要这里我们不考虑z坐标情况<br>$$<br>M_{viewport} = M_sM_t=<br>\begin{bmatrix}<br>\frac{w}{2} &amp;0 &amp;0 &amp;\frac{w}{2} \<br>0 &amp;\frac{height}{2} &amp;0 &amp;\frac{height}{2} \<br>0 &amp;0 &amp;1 &amp;0 \<br>0 &amp;0 &amp;0 &amp; 1<br>\end{bmatrix}<br>$$</p>
-<h3 id="4-4-投影推广"><a href="#4-4-投影推广" class="headerlink" title="4. 4 投影推广"></a>4. 4 投影推广</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28379857">https://zhuanlan.zhihu.com/p/28379857</a></p>
+<h3 id="4-4-投影推广"><a href="#4-4-投影推广" class="headerlink" title="4. 4 投影推广"></a>4. 4 投影推广</h3><p><a href="https://zhuanlan.zhihu.com/p/28379857">https://zhuanlan.zhihu.com/p/28379857</a></p>
 <p><img src="C:\Users\laiwugong\AppData\Roaming\Typora\typora-user-images\image-20200519172001620.png" alt="image-20200519172001620"></p>
 <h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>变换内容，我们讲了基本5中变换矩阵，同时还讲到如何进行法线变换、矩阵分解和逆矩阵内容。还有一些其他内容，由于在后续的内容中暂时不会用到，因此不多做过多阐述。</p>
 <p>变换其他内容，包括顶点混合、形变等高级部分，将放在后续章节讲述。这是因为光栅化渲染和光线追踪内容，并不会涉及。等到讲到几何部分才会用到。</p>
 <h2 id="6-参考资料"><a href="#6-参考资料" class="headerlink" title="6. 参考资料"></a>6. 参考资料</h2><ol>
-<li>投影矩阵推导：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/davelink/p/5623760.html">https://www.cnblogs.com/davelink/p/5623760.html</a> 原文：<a target="_blank" rel="noopener" href="https://www.codeguru.com/cpp/misc/misc/graphics/article.php/c10123/Deriving-Projection-Matrices.htm">https://www.codeguru.com/cpp/misc/misc/graphics/article.php/c10123/Deriving-Projection-Matrices.htm</a></li>
+<li>投影矩阵推导：<a href="https://www.cnblogs.com/davelink/p/5623760.html">https://www.cnblogs.com/davelink/p/5623760.html</a> 原文：<a href="https://www.codeguru.com/cpp/misc/misc/graphics/article.php/c10123/Deriving-Projection-Matrices.htm">https://www.codeguru.com/cpp/misc/misc/graphics/article.php/c10123/Deriving-Projection-Matrices.htm</a></li>
 </ol>
 
       
@@ -501,7 +501,7 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: true,
+		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
